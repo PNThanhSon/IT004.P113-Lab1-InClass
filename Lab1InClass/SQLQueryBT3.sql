@@ -16,7 +16,7 @@ ADD CONSTRAINT CHK_DIEM CHECK (DIEM >= 0 AND DIEM <= 10); --Ràng buộc điểm
 --5. Kết quả thi là “Dat” nếu điểm từ 5 đến 10 và “Khong dat” nếu điểm nhỏ hơn 5.
 ALTER TABLE KETQUATHI ADD CONSTRAINT CHK_KETQUA CHECK
 (	
-	(KQUA = 'Dat' AND DIEM >= 0 AND DIEM <= 10)
+	(KQUA = 'Dat' AND DIEM >= 5 AND DIEM <= 10)
 	OR (KQUA = 'Khong dat' AND DIEM < 5)
 )
 
