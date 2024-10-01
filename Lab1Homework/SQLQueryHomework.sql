@@ -58,7 +58,7 @@ FROM ChuyenGia_DuAn;
 -- 65. Hiển thị họ tên và ngày sinh của các chuyên gia sinh năm 1990 trở về sau.
 SELECT	HoTen, NgaySinh
 FROM ChuyenGia
-WHERE YEAR(NgaySinh) > 1990;
+WHERE YEAR(NgaySinh) >= 1990;
 -- 66. Liệt kê tên công ty và số nhân viên, sắp xếp theo số nhân viên giảm dần.
 SELECT	TenCongTy, SoNhanVien
 FROM CongTy
