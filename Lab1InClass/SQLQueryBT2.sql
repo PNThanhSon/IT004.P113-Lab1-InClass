@@ -21,6 +21,9 @@ Em sử dụng kiểu dữ liệu varchar(20)
 */
 ALTER TABLE KHACHHANG
 ALTER COLUMN LOAIKH VARCHAR(20);
+ALTER TABLE KHACHHANG
+ADD CONSTRAINT CHECK_LOAIKH CHECK(LOAIKH IN('Vang
+lai', 'Thuong xuyen', 'Vip');
 
 --7. Đơn vị tính của sản phẩm chỉ có thể là (“cay”,”hop”,”cai”,”quyen”,”chuc”)
 ALTER TABLE SANPHAM
