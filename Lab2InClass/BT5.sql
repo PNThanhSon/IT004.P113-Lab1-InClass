@@ -1,4 +1,4 @@
-﻿--1. In ra danh sách các sản phẩm (MASP,TENSP) do “Trung Quoc” sản xuất.
+--1. In ra danh sách các sản phẩm (MASP,TENSP) do “Trung Quoc” sản xuất.
 SELECT MASP, TENSP
 FROM SANPHAM
 WHERE DVT IN ('cay', 'quyen');
@@ -21,7 +21,8 @@ WHERE NUOCSX = 'Trung Quoc' AND GIA BETWEEN 30000 AND 40000;
 --5. In ra danh sách các sản phẩm (MASP,TENSP) do “Trung Quoc” hoặc “Thai Lan” sản xuất có giá từ 30.000 đến 40.000.
 SELECT MASP, TENSP
 FROM SANPHAM
-WHERE NUOCSX = 'Thai Lan' AND GIA BETWEEN 30000 AND 40000;
+WHERE (NUOCSX = 'Thai Lan' OR NUOCSX = 'Trung Quoc')
+AND GIA BETWEEN 30000 AND 40000;
 
 --6. In ra các số hóa đơn, trị giá hóa đơn bán ra trong ngày 1/1/2007 và ngày 2/1/2007.
 SELECT SOHD, TRIGIA
@@ -37,7 +38,8 @@ ORDER BY NGHD ASC, TRIGIA DESC;
 --8. In ra danh sách các khách hàng (MAKH, HOTEN) đã mua hàng trong ngày 1/1/2007.
 SELECT KHACHHANG.MAKH, HOTEN
 FROM KHACHHANG, HOADON
-WHERE HOADON.MAKH = KHACHHANG.MAKH AND NGHD = '2007-1-1';
+WHERE HOADON.MAKH = KHACHHANG.MAKH
+AND NGHD = '2007-1-1';
 
 --9. In ra số hóa đơn, trị giá các hóa đơn do nhân viên có tên “Nguyen Van B” lập trong ngày 28/10/2006.
 SELECT SOHD, TRIGIA
@@ -50,10 +52,12 @@ AND NHANVIEN.HOTEN = 'Nguyen Van B';
 SELECT DISTINCT CTHD.MASP, SANPHAM.TENSP
 FROM CTHD, HOADON, SANPHAM, KHACHHANG
 WHERE HOADON.MAKH = KHACHHANG.MAKH
+AND CTHD.SOHD = HOADON.SOHD
+AND CTHD.MASP = SANPHAM.MASP
 AND KHACHHANG.HOTEN = 'Nguyen Van A'
 AND HOADON.NGHD BETWEEN '2006-10-1' AND '2006-10-31';
 
---11. Tìm các số hóa đơn đã mua sản phẩm có mã số “BB01” hoặc “BB02”
+--11. Tìm các số hóa đơn đã mua sản phẩm có mã số “BB01” hoặc “BB02”.
 SELECT DISTINCT HOADON.SOHD
 FROM HOADON, CTHD
 WHERE HOADON.SOHD = CTHD.SOHD
