@@ -11,7 +11,7 @@ WHERE NUOCSX = 'Thai Lan';
 --4. Cập nhật giá giảm 5% đối với những sản phẩm do “Trung Quoc” sản xuất có giá từ 10.000 trở xuống (cho quan hệ SANPHAM1).
 UPDATE SANPHAM1
 SET GIA = GIA * 0.95
-WHERE NUOCSX = 'Trung Quoc';
+WHERE NUOCSX = 'Trung Quoc' AND GIA <= 10000;
 /*
 5. Cập nhật giá trị LOAIKH là “Vip” đối với những khách hàng đăng ký thành viên trước ngày 1/1/2007
 có doanh số từ 10.000.000 trở lên hoặc khách hàng đăng ký thành viên từ 1/1/2007 trở về sau
