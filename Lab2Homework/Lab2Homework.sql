@@ -146,7 +146,7 @@ ORDER BY SoDuAn DESC;
 SELECT KyNang.TenKyNang, COUNT(DISTINCT ChuyenGia_KyNang.MaChuyenGia) AS 'SoChuyenGia'
 FROM ChuyenGia_KyNang
 INNER JOIN KyNang ON ChuyenGia_KyNang.MaKyNang = KyNang.MaKyNang
-WHERE ChuyenGia_KyNang.CapDo > 4
+WHERE ChuyenGia_KyNang.CapDo >= 4
 GROUP BY KyNang.TenKyNang
 HAVING COUNT(DISTINCT ChuyenGia_KyNang.MaChuyenGia) > 2
 ORDER BY KyNang.TenKyNang ASC;
@@ -178,7 +178,7 @@ ORDER BY ChuyenGia.HoTen ASC;
 SELECT KyNang.TenKyNang, COUNT(DISTINCT ChuyenGia_KyNang.MaChuyenGia) AS 'SoChuyenGia'
 FROM ChuyenGia_KyNang
 INNER JOIN KyNang ON ChuyenGia_KyNang.MaKyNang = KyNang.MaKyNang
-WHERE ChuyenGia_KyNang.CapDo > 4
+WHERE ChuyenGia_KyNang.CapDo >= 4
 GROUP BY KyNang.TenKyNang
 HAVING COUNT(DISTINCT ChuyenGia_KyNang.MaChuyenGia) > 2
 ORDER BY KyNang.TenKyNang ASC;
