@@ -11,6 +11,7 @@ SELECT ChuyenGia.HoTen
 FROM ChuyenGia
 INNER JOIN ChuyenGia_DuAn ON ChuyenGia.MaChuyenGia = ChuyenGia_DuAn.MaChuyenGia
 WHERE ChuyenGia_DuAn.MaDuAn = 2;
+
 -- 10. Hiển thị tên công ty và tên dự án của tất cả các dự án.
 SELECT CongTy.TenCongTy, DuAn.TenDuAn
 FROM DuAn
@@ -20,6 +21,7 @@ INNER JOIN CongTy ON CongTy.MaCongTy = DuAn.MaCongTy;
 SELECT ChuyenNganh, COUNT(*) AS 'SoChuyenGia'
 FROM ChuyenGia
 GROUP BY ChuyenNganh;
+
 -- 12. Tìm chuyên gia có số năm kinh nghiệm cao nhất.
 SELECT TOP 1 *
 FROM ChuyenGia
@@ -85,8 +87,8 @@ GROUP BY ChuyenGia.HoTen;
 -- 21. Tìm các công ty không có dự án nào.
 SELECT *
 FROM CongTy
-WHERE MaCongTy NOT IN (	SELECT MaCongTy
-						FROM DuAn);
+WHERE MaCongTy NOT IN (	SELECT MaCongTy FROM DuAn);
+
 -- 22. Hiển thị tên chuyên gia và tên dự án họ tham gia, bao gồm cả chuyên gia không tham gia dự án nào.
 SELECT ChuyenGia.HoTen, DuAn.TenDuAn
 FROM ChuyenGia
