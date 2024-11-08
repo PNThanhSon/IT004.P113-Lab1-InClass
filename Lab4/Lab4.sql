@@ -28,13 +28,13 @@ GROUP BY CongTy.TenCongTy;
 -- 79. Tìm các chuyên gia có ít nhất một kỹ năng cấp độ 5 nhưng không có kỹ năng nào dưới cấp độ 3.
 SELECT ChuyenGia.HoTen
 FROM ChuyenGia
-INNER JOIN ChuyenGia_KyNang ON ChuyenGia.MaChuyenGia = ChuyenGia_KyNang.MaChuyenGia
+JOIN ChuyenGia_KyNang ON ChuyenGia.MaChuyenGia = ChuyenGia_KyNang.MaChuyenGia
 WHERE CapDo = 5
 AND NOT EXISTS (
-	SELECT 1
-	FROM ChuyenGia
-	INNER JOIN ChuyenGia_KyNang ON ChuyenGia.MaChuyenGia = ChuyenGia_KyNang.MaChuyenGia
-	WHERE CapDo < 3
+    SELECT 1
+    FROM ChuyenGia_KyNang
+    WHERE ChuyenGia_KyNang.MaChuyenGia = ChuyenGia.MaChuyenGia
+    AND CapDo < 3
 );
 
 -- 80. Liệt kê các chuyên gia và số lượng dự án họ tham gia, bao gồm cả những chuyên gia không tham gia dự án nào.
