@@ -120,11 +120,10 @@ SELECT TenCongTy,
 FROM CongTy ct;
 
 -- 89. Tìm các chuyên gia có kỹ năng "bù trừ" nhau (một người giỏi kỹ năng A nhưng yếu kỹ năng B, người kia ngược lại).
-SELECT cg1.HoTen AS CG1, cg2.HoTen AS CG2, kn1.TenKyNang AS KyNangA,
-	kn2.TenKyNang AS KyNangB, cgkn1.CapDo AS CapDo_CG1_KyNangA,
-	cgkn2.CapDo AS CapDo_CG2_KyNangB 
+SELECT DISTINCT cg1.HoTen AS CG1, cg2.HoTen AS CG2 
 FROM ChuyenGia_KyNang cgkn1 
-JOIN ChuyenGia_KyNang cgkn2 ON cgkn1.MaChuyenGia <> cgkn2.MaChuyenGia AND cgkn1.MaKyNang <> cgkn2.MaKyNang 
+JOIN ChuyenGia_KyNang cgkn2 ON cgkn1.MaChuyenGia < cgkn2.MaChuyenGia
+AND cgkn1.MaKyNang <> cgkn2.MaKyNang 
 JOIN ChuyenGia cg1 ON cgkn1.MaChuyenGia = cg1.MaChuyenGia 
 JOIN ChuyenGia cg2 ON cgkn2.MaChuyenGia = cg2.MaChuyenGia 
 JOIN KyNang kn1 ON cgkn1.MaKyNang = kn1.MaKyNang 
