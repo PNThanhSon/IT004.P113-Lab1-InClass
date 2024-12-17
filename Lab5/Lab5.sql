@@ -154,14 +154,39 @@ END;
 
 -- 123. Tạo một trigger để tự động cập nhật lương của chuyên gia dựa trên cấp độ kỹ năng và số năm kinh nghiệm.
 
--
+
 -- 124. Tạo một trigger để tự động gửi thông báo khi một dự án sắp đến hạn (còn 7 ngày).
 
 -- Tạo bảng ThongBao nếu chưa có
 
 
 -- 125. Tạo một trigger để ngăn chặn việc xóa hoặc cập nhật thông tin của chuyên gia đang tham gia dự án.
-
+CREATE TRIGGER TRG_CG_DA_THAMGIA
+ON ChuyenGia
+AFTER DELETE, UPDATE
+AS
+BEGIN
+	IF EXISTS (
+		SELECT MaChuyenGia 
+		FROM (
+			SELECT d.MaChuyenGia
+			FROM deleted d
+			UNION
+			SELECT i.MaChuyenGia
+			FROM inserted i
+		) AS KetHop
+		WHERE MaChuyenGia IN (
+			SELECT MaChuyenGia
+			FROM ChuyenGia_DuAn CGDA
+			JOIN DuAn DA ON CGDA.MaDuAn = DA.MaDuAn
+			WHERE DA.TrangThai = N'Đang thực hiện'
+		)
+	)
+	BEGIN
+		RAISERROR('Không thể xóa hoặc cập nhật thông tin của chuyên gia đang tham gia dự án', 16, 1);
+		ROLLBACK TRANSACTION;
+	END
+END;
 
 -- 126. Tạo một trigger để tự động cập nhật số lượng chuyên gia trong mỗi chuyên ngành.
 
@@ -185,8 +210,23 @@ END;
 
 
 -- 131. Tạo một trigger để ngăn chặn việc thêm kỹ năng trùng lặp cho một chuyên gia.
-
-
+CREATE TRIGGER TRG_KN_TRUNG_CG
+ON ChuyenGia_KyNang
+AFTER INSERT
+AS
+BEGIN
+	IF EXISTS (
+		SELECT 1
+		FROM inserted i
+		JOIN ChuyenGia_KyNang CGKN
+		ON i.MaChuyenGia = CGKN.MaChuyenGia
+		AND i.MaKyNang = CGKN.MaKyNang
+	)
+	BEGIN
+		RAISERROR('Không thể thêm kỹ năng trùng lặp cho một chuyên gia.', 16, 1);
+		ROLLBACK TRANSACTION;
+	END
+END;
 
 -- 132. Tạo một trigger để tự động tạo báo cáo tổng kết khi một dự án kết thúc.
 
