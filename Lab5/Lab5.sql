@@ -158,7 +158,18 @@ END;
 -- 124. Tạo một trigger để tự động gửi thông báo khi một dự án sắp đến hạn (còn 7 ngày).
 
 -- Tạo bảng ThongBao nếu chưa có
-
+CREATE TABLE ThongBao (
+	MaThongBao INT IDENTITY(1,1) PRIMARY KEY,
+	MaDuAn INT,
+	ThongBao VARCHAR(20)
+);
+CREATE TRIGGER TRG_DEADLINE_DA
+ON DuAn
+AFTER INSERT, UPDATE
+AS
+BEGIN
+	
+END;
 
 -- 125. Tạo một trigger để ngăn chặn việc xóa hoặc cập nhật thông tin của chuyên gia đang tham gia dự án.
 CREATE TRIGGER TRG_CG_DA_THAMGIA
@@ -189,13 +200,42 @@ BEGIN
 END;
 
 -- 126. Tạo một trigger để tự động cập nhật số lượng chuyên gia trong mỗi chuyên ngành.
-
 -- Tạo bảng ThongKeChuyenNganh nếu chưa có
-
+CREATE TABLE ThongKeChuyenNganh (
+	MaChuyenNganh INT IDENTITY(1,1) PRIMARY KEY,
+	ChuyenNganh NVARCHAR(50),
+	SoLuong INT
+);
+CREATE TRIGGER TRG_SL_CG_CN
+ON ChuyenGia
+AFTER INSERT
+AS
+BEGIN
+	UPDATE TK
+	SET TK.SoLuong = TK.SoLuong + BangMoi.SLMoi
+	FROM ThongKeChuyenNganh TK
+	JOIN (
+		SELECT ChuyenNganh, COUNT(*) AS SLMoi
+		FROM inserted
+		GROUP BY ChuyenNganh
+	) BangMoi ON TK.ChuyenNganh = BangMoi.ChuyenNganh;
+END;
 -- 127. Tạo một trigger để tự động tạo bản sao lưu của dự án khi nó được đánh dấu là hoàn thành.
-
 -- Tạo bảng DuAnHoanThanh nếu chưa có
-
+CREATE TABLE DuAnHoanThanh (
+	MaDuAn INT PRIMARY KEY,
+	TrangThai NVARCHAR(50)
+	CONSTRAINT FK_MaDuAn FOREIGN KEY (MaDuAn) REFERENCES DuAn(MaDuAn)
+);
+CREATE TRIGGER TRG_SAO_LUU_DA_HOAN_THANH
+ON DuAn
+AFTER INSERT, UPDATE
+AS
+BEGIN
+	INSERT INTO DuAnHoanThanh (MaDuAn, TrangThai)
+	SELECT MaDuAn, TrangThai
+	FROM inserted
+END;
 
 -- 128. Tạo một trigger để tự động cập nhật điểm đánh giá trung bình của công ty dựa trên điểm đánh giá của các dự án.
 
@@ -206,8 +246,18 @@ END;
 
 
 -- 130. Tạo một trigger để tự động cập nhật trạng thái "bận" của chuyên gia khi họ được phân công vào dự án mới.
-
-
+CREATE TRIGGER TRG_TRANG_THAI_BAN
+ON ChuyenGia_DuAn
+AFTER INSERT
+AS
+BEGIN
+	UPDATE ChuyenGia
+	SET TrangThai = N'Bận'
+	WHERE MaChuyenGia IN (
+		SELECT DISTINCT MaChuyenGia
+		FROM inserted
+	);
+END;
 
 -- 131. Tạo một trigger để ngăn chặn việc thêm kỹ năng trùng lặp cho một chuyên gia.
 CREATE TRIGGER TRG_KN_TRUNG_CG
@@ -239,13 +289,26 @@ END;
 
 
 -- 134. Tạo một trigger để tự động gửi thông báo khi một chuyên gia được thăng cấp (dựa trên số năm kinh nghiệm).
-
+CREATE TRIGGER TRG_CG_THANG_CAP
+ON ChuyenGia
+AFTER UPDATE
+AS
+BEGIN
+	IF EXISTS (
+		SELECT 1
+        FROM inserted i
+        JOIN deleted d ON i.MaChuyenGia = d.MaChuyenGia
+        WHERE i.NamKinhNghiem > d.NamKinhNghiem
+	)
+	BEGIN
+		PRINT 'Chuyên gia được thăng cấp';
+	END
+END;
 
 -- 135. Tạo một trigger để tự động cập nhật trạng thái "khẩn cấp" cho dự án khi thời gian còn lại ít hơn 10% tổng thời gian dự án.
 
 
 -- 136. Tạo một trigger để tự động cập nhật số lượng dự án đang thực hiện của mỗi chuyên gia.
-
 
 -- 137. Tạo một trigger để tự động tính toán và cập nhật tỷ lệ thành công của công ty dựa trên số dự án hoàn thành và tổng số dự án.
 
