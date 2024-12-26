@@ -50,6 +50,10 @@ WITH MaxKinhNghiemChuyenNganh AS (
 	FROM ChuyenGia
 	GROUP BY ChuyenNganh
 )
+SELECT HoTen
+FROM ChuyenGia CG
+JOIN MaxKinhNghiemChuyenNganh MKN
+ON CG.NamKinhNghiem = MKN.KinhNghiem AND CG.ChuyenNganh = MKN.ChuyenNganh;
 
 --10. Liệt kê các cặp chuyên gia đã từng làm việc cùng nhau trong ít nhất một dự án.
 SELECT DISTINCT
